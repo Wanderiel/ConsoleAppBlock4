@@ -7,22 +7,22 @@ namespace ConsoleAppB4P5
         static void Main(string[] args)
         {
             int size = 30;
-            int[] numbers = FillIntArray(new int[size]);
+            int[] numbers = FillArray(new int[size]);
 
             Console.WriteLine("Дан массив чисел:");
 
-            PrintIntArray(numbers);
+            PrintArray(numbers);
 
             Console.WriteLine("\nПосле перемешивания:");
 
             numbers = Shuffle(numbers);
 
-            PrintIntArray(numbers);
+            PrintArray(numbers);
 
             Console.ReadKey();
         }
 
-        static private int[] FillIntArray(int[] numbers)
+        static private int[] FillArray(int[] numbers)
         {
             for (int i = 0; i < numbers.Length; i++)
                 numbers[i] = i;
@@ -30,7 +30,7 @@ namespace ConsoleAppB4P5
             return numbers;
         }
 
-        static private void PrintIntArray(int[] numbers)
+        static private void PrintArray(int[] numbers)
         {
             for (int i = 0; i < numbers.Length; i++)
                 Console.Write($"{numbers[i]} ");
