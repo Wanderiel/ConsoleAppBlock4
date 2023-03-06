@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml;
 
 namespace SpecialBar
 {
@@ -41,17 +42,8 @@ namespace SpecialBar
 
             GetPosition(out int positionTop, out int positionLeft);
 
-            Console.Write("Введите процент заполнения: ");
-
-            if (int.TryParse(Console.ReadLine(), out int value))
-            {
-                percent = GetCorrectNumber(value, maxPercent);
-            }
-            else
-            {
-                Console.WriteLine("Нераспознаный ввод, будет использовано заполнение на " +
-                    $"{percent}%");
-            }
+            if (TryGetNumber("Введите процент заполнения: ", out int value, maxPercent))
+                percent = value;
 
             Console.Write("\nВсе данные собраны. Для отображения бара нажмите любую клавишу...");
             Console.ReadKey();
@@ -68,32 +60,38 @@ namespace SpecialBar
             positionTop = 0;
             positionLeft = 0;
 
-            Console.Write("Введите позицию по вертикали: ");
+            if (TryGetNumber("Введите позицию по вертикали: ", out int value))
+                positionTop = value;
 
-            if (int.TryParse(Console.ReadLine(), out int top))
-            {
-                positionTop = GetCorrectNumber(top);
-
-                Console.Write("Введите позицию по горизонтали: ");
-
-                if (int.TryParse(Console.ReadLine(), out int left))
-                    positionLeft = GetCorrectNumber(left);
-                else
-                    Console.WriteLine("Нераспознаный ввод, будет выполнена отрисовка в стандартной позиции");
-            }
-            else
-            {
-                Console.WriteLine("Нераспознаный ввод, будет выполнена отрисовка в стандартной позиции");
-            }
+            if (TryGetNumber("Введите позицию по горизонтали: ", out value))
+                positionLeft = value;
         }
 
-        private static int GetCorrectNumber(int number, int correct = 30)
+        private static bool TryGetNumber(string message, out int number, int maxValue = 30)
         {
-            if (Math.Abs(number) > correct)
-                number %= correct;
+            Console.Write(message);
+
+            if (int.TryParse(Console.ReadLine(), out int value))
+            {
+                number = GetCorrectNumber(value, maxValue);
+
+                return true;
+            }
+            
+            Console.WriteLine("Нераспознаный ввод, будет взято стандартное значение");
+
+            number = 0;
+
+            return false;
+        }
+
+        private static int GetCorrectNumber(int number, int maxValue)
+        {
+            if (Math.Abs(number) > maxValue)
+                number %= maxValue;
 
             if (number < 0)
-                number = correct + number;
+                number = maxValue + number;
 
             Console.WriteLine($"Приянто в значение {number}");
 
