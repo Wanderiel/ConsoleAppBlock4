@@ -20,7 +20,7 @@ namespace ConsoleAppB4P4
             Console.ReadKey();
         }
 
-        static private char[,] FillMap(string path)
+        private static char[,] FillMap(string path)
         {
             string[] file = File.ReadAllLines(path);
 
@@ -33,7 +33,7 @@ namespace ConsoleAppB4P4
             return map;
         }
 
-        static private int PrintMap(char[,] map)
+        private static int PrintMap(char[,] map)
         {
             char treasure = '$';
             int score = 0;
@@ -54,7 +54,7 @@ namespace ConsoleAppB4P4
             return score;
         }
 
-        static private string Play(char[,] map, int trueScore)
+        private static string Play(char[,] map, int trueScore)
         {
             Random random = new Random();
 
@@ -64,7 +64,7 @@ namespace ConsoleAppB4P4
             const ConsoleKey RigthCommand = ConsoleKey.RightArrow;
             const ConsoleKey ExitCommand = ConsoleKey.Escape;
 
-            bool isWork = true;
+            bool isWorking = true;
 
             char wall = '#';
             char user = '@';
@@ -78,12 +78,12 @@ namespace ConsoleAppB4P4
             int positionX = 0;
             int positionY = random.Next(minRamdom, map.GetLength(0));
 
-            while (isWork)
+            while (isWorking)
             {
                 positionX = random.Next(minRamdom, map.GetLength(1));
 
                 if (map[positionY, positionX] == shadow)
-                    isWork = false;
+                    isWorking = false;
             }
 
             PritnScore(score, minRamdom + map.GetLength(1));
@@ -92,9 +92,9 @@ namespace ConsoleAppB4P4
             Console.SetCursorPosition(positionX, positionY);
             Console.Write(user);
 
-            isWork = true;
+            isWorking = true;
 
-            while (isWork)
+            while (isWorking)
             {
                 int shiftY = 0;
                 int shiftX = 0;
@@ -120,7 +120,7 @@ namespace ConsoleAppB4P4
                         break;
 
                     case ExitCommand:
-                        isWork = false;
+                        isWorking = false;
                         break;
                 }
 
@@ -150,14 +150,14 @@ namespace ConsoleAppB4P4
                 {
                     Console.SetCursorPosition(0, minRamdom + map.GetLength(0));
                     result = $"Победа! Собраны все сокровища! Ваши очки: {score}";
-                    isWork = false;
+                    isWorking = false;
                 }
             }
 
             return result;
         }
 
-        static private void PritnScore(int score, int positionLeft)
+        private static void PritnScore(int score, int positionLeft)
         {
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.SetCursorPosition(positionLeft, 0);
