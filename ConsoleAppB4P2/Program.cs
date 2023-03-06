@@ -10,17 +10,19 @@ namespace SpecialBar
             const string ManaBarColorCommand = "2";
 
             int percent = 50;
+            int maxPercent = 100;
 
             ConsoleColor color = ConsoleColor.Yellow;
             ConsoleColor colorRed = ConsoleColor.Red;
             ConsoleColor colorBlue = ConsoleColor.Blue;
 
-            Console.WriteLine("Программа рисует специальный бар.\n" +
+            Console.WriteLine("Программа рисует специальный бар." +
+                "Любой выбор и ввод может быть скорректирован\n" +
                 "Сейчас доступно только два:" +
                 $"\n{HealthBarColorCommand}. Здоровье" +
                 $"\n{ManaBarColorCommand}. Мана");
 
-            Console.Write("\nКакой бар вы хотите отобразить:");
+            Console.Write("\nКакой бар вы хотите отобразить: ");
 
             switch (Console.ReadLine())
             {
@@ -34,88 +36,81 @@ namespace SpecialBar
 
                 default:
                     Console.WriteLine("Нераспознанный ввод, отрисовка будет с тандартном цвете.");
-                    Console.ReadKey();
                     break;
             }
 
             GetPosition(out int positionTop, out int positionLeft);
 
-            Console.Write("\nВведите процент заполнения: ");
+            Console.Write("Введите процент заполнения: ");
 
             if (int.TryParse(Console.ReadLine(), out int value))
             {
-                percent = value;
-
-                if (percent < 0)
-                    percent *= -1;
+                percent = GetCorrectNumber(value, maxPercent);
             }
             else
             {
-                Console.WriteLine("\nНераспознаный ввод, будет использовано заполнение на " +
+                Console.WriteLine("Нераспознаный ввод, будет использовано заполнение на " +
                     $"{percent}%");
             }
 
+            Console.Write("\nВсе данные собраны. Для отображения бара нажмите любую клавишу...");
+            Console.ReadKey();
+
             Console.Clear();
 
-            DrawBar(positionTop, positionLeft, percent, color);
+            DrawBar(positionTop, positionLeft, percent, maxPercent, color);
 
             Console.ReadKey();
         }
 
-        static private void GetPosition(out int positionTop, out int positionLeft)
+        private static void GetPosition(out int positionTop, out int positionLeft)
         {
             positionTop = 0;
             positionLeft = 0;
 
-            Console.Write("\nВведите позицию по вертикали: ");
+            Console.Write("Введите позицию по вертикали: ");
 
             if (int.TryParse(Console.ReadLine(), out int top))
             {
-                positionTop = GetCorrectCoordinate(top);
+                positionTop = GetCorrectNumber(top);
 
                 Console.Write("Введите позицию по горизонтали: ");
 
                 if (int.TryParse(Console.ReadLine(), out int left))
-                    positionLeft = GetCorrectCoordinate(left);
+                    positionLeft = GetCorrectNumber(left);
                 else
-                    Console.WriteLine("\nНераспознаный ввод, будет выполнена отрисовка в стандартной позиции");
+                    Console.WriteLine("Нераспознаный ввод, будет выполнена отрисовка в стандартной позиции");
             }
             else
             {
-                Console.WriteLine("\nНераспознаный ввод, будет выполнена отрисовка в стандартной позиции");
+                Console.WriteLine("Нераспознаный ввод, будет выполнена отрисовка в стандартной позиции");
             }
         }
 
-        static private int GetCorrectCoordinate(int number)
+        private static int GetCorrectNumber(int number, int correct = 30)
         {
-            int correct = 15;
-
-            if (number < 0)
-                number *= -1;
-
-            if (number > correct)
+            if (Math.Abs(number) > correct)
                 number %= correct;
 
-            Console.WriteLine($"Ввод скоординирован в начение {number}");
+            if (number < 0)
+                number = correct + number;
+
+            Console.WriteLine($"Приянто в значение {number}");
 
             return number;
         }
 
-        static private void DrawBar(int positionTop, int positionLeft,
-            int percent, ConsoleColor color)
+        private static void DrawBar(int positionTop, int positionLeft,
+            int percent, int maxPercent, ConsoleColor color)
         {
             int length = 30;
-            int fullPercent = 100;
 
-            if (Math.Abs(percent) > fullPercent)
-                percent %= fullPercent;
-
-            int fullPoint = length * percent / fullPercent;
+            int fullPoint = length * percent / maxPercent;
             int emptyPoint = length - fullPoint;
             char symbol1 = '█';
             char symbol2 = '~';
 
-            Console.SetCursorPosition(positionTop, positionLeft);
+            Console.SetCursorPosition(positionLeft, positionTop);
 
             Console.Write("[");
 
